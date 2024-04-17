@@ -1,1 +1,10 @@
-spring.application.name=auth-server
+spring:
+  security:
+    user:
+      name: user
+      password: user
+logging:
+  level:
+    root: info
+    poc: debug
+    org.springframework.security: TRACE
