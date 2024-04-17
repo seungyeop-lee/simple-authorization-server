@@ -7,21 +7,14 @@ Content-Type: application/json
   "password": "user"
 }
 
-> {%
-    client.global.set('X-Session-Id', response.headers.valueOf('X-Session-Id'))
-%}
-
 ### logout
 GET http://localhost:8080/logout
-X-Session-Id: {{X-Session-Id}}
 
 ### hello
 GET http://localhost:8080/hello
-X-Session-Id: {{X-Session-Id}}
 
 ### get code
 GET http://localhost:8080/oauth2/authorize?response_type=code&client_id=oidc-client&redirect_uri=http://localhost:8080/check&scope=openid+profile
-X-Session-Id: {{X-Session-Id}}
 
 ### get token
 POST http://localhost:8080/oauth2/token
