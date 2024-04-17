@@ -11,7 +11,7 @@ public class ServletFilterConfig {
     @Bean
     public FilterRegistrationBean<CachedBodyHttpServletRequestFilter> contentCachingWrapFilter() {
         FilterRegistrationBean<CachedBodyHttpServletRequestFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.addUrlPatterns("/login");
+        registrationBean.addUrlPatterns("/signin");
         registrationBean.setFilter(new CachedBodyHttpServletRequestFilter());
         registrationBean.setOrder(Integer.MIN_VALUE);
         return registrationBean;

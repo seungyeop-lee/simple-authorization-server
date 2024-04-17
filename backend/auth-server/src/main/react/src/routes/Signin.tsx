@@ -1,7 +1,7 @@
-import './Login.css'
+import './Signin.css'
 import {Button, OutlinedInput} from "@mui/material";
 
-function Login() {
+function Signin() {
     return (
         <div className="h-svh">
             <div className="flex h-full">
@@ -49,4 +49,4 @@ function Login() {
     )
 }
 
-export default Login
+export default Signin

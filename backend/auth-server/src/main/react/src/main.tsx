@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom/client'
 import './index.css'
 import {StyledEngineProvider, ThemeProvider} from "@mui/material";
 import theme from "./components/theme.ts";
-import Login from "./routes/Login.tsx";
+import Signin from "./routes/Signin.tsx";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Signup from "./routes/Signup.tsx";
 
 const router = createBrowserRouter([
     {
         path: "/page/signin",
-        element: <Login />,
+        element: <Signin />,
     },
     {
         path: "/page/signup",
