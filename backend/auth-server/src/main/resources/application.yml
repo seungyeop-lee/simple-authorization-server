@@ -8,3 +8,6 @@ logging:
     root: info
     poc: debug
     org.springframework.security: TRACE
+app:
+  authorization:
+    loginUrl: http://localhost:3000

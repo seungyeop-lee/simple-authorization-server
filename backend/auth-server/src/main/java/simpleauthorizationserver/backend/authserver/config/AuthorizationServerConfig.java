@@ -1,10 +1,11 @@
 package simpleauthorizationserver.backend.authserver.config;
 
-import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -18,11 +19,16 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
 import java.util.UUID;
 
 @Configuration
 public class AuthorizationServerConfig {
+
+    @Value("${app.authorization.loginUrl}")
+    private String loginUrl;
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -32,7 +38,10 @@ public class AuthorizationServerConfig {
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).oidc(Customizer.withDefaults());
 
         http.exceptionHandling(c -> c
-                .authenticationEntryPoint((request, response, authException) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED))
+                .defaultAuthenticationEntryPointFor(
+                        new LoginUrlAuthenticationEntryPoint(loginUrl),
+                        new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+                )
         );
 
         http.oauth2ResourceServer(c -> c.
