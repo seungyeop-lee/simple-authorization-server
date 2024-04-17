@@ -1,6 +1,6 @@
-import './App.css'
+import './Root.css'
 
-function App() {
+function Root() {
     return (
         <>
             <h1>Auth Client</h1>
@@ -8,4 +8,4 @@ function App() {
     )
 }
 
-export default App
+export default Root
