@@ -31,8 +31,7 @@ public class SecurityConfig {
         http.formLogin(AbstractHttpConfigurer::disable);
 
         http.with(new JsonLoginConfigurer<>(), c -> c
-                // 로그인 완료 시 리다이렉션 방지
-                .successHandler((request, response, authentication) -> response.setStatus(HttpServletResponse.SC_OK))
+                .defaultSuccessUrl("/authenticated")
                 // 로그인 실패 시 리다이렉션 방지
                 .failureHandler((request, response, exception) -> response.setStatus(HttpServletResponse.SC_BAD_REQUEST))
         );

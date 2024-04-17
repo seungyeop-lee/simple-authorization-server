@@ -4,10 +4,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class HelloController {
+public class AuthenticatedController {
 
-    @GetMapping("/hello")
-    public String hello() {
-        return "hello";
+    @GetMapping("/authenticated")
+    public String authenticated() {
+        return "Authentication is Successful!";
     }
 }

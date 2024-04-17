@@ -1,4 +1,5 @@
 ### login
+#@no-redirect
 POST http://localhost:8080/login
 Content-Type: application/json
 
@@ -10,10 +11,11 @@ Content-Type: application/json
 ### logout
 GET http://localhost:8080/logout
 
-### hello
-GET http://localhost:8080/hello
+### authenticated
+GET http://localhost:8080/authenticated
 
 ### get code
+#@no-redirect
 GET http://localhost:8080/oauth2/authorize?response_type=code&client_id=oidc-client&redirect_uri=http://localhost:8080/check&scope=openid+profile
 
 ### get token
