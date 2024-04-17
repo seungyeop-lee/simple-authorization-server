@@ -2,7 +2,7 @@ spring:
   security:
     user:
       name: user
-      password: user
+      password: '{noop}user'
 logging:
   level:
     root: info
