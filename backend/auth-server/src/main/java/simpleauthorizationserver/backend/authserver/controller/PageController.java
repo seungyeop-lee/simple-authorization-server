@@ -10,6 +10,6 @@ public class PageController {
 
     @GetMapping("/**")
     public String page() {
-        return "/index.html";
+        return "/client/index.html";
     }
 }

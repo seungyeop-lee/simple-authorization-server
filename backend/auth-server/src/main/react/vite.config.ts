@@ -7,15 +7,9 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  base: '/client/',
   build: {
-    outDir: '../resources/public',
-    emptyOutDir: true,
-    rollupOptions: {
-      output: {
-        entryFileNames: `assets/[name].js`,
-        chunkFileNames: `assets/[name].js`,
-        assetFileNames: `assets/[name].[ext]`
-      }
-    }
+    outDir: '../resources/public/client',
+    emptyOutDir: true
   }
 })

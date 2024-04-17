@@ -19,10 +19,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(c -> c
                 .requestMatchers(
-                        "index.html",
-                        "favicon.ico",
+                        "/error",
+                        "/favicon.ico",
                         "/page/**",
-                        "/assets/**"
+                        "/client/**"
                 ).permitAll()
                 .anyRequest().authenticated()
         );
