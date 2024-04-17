@@ -1,6 +1,5 @@
 package simpleauthorizationserver.backend.authserver.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -27,9 +26,6 @@ import java.util.UUID;
 @Configuration
 public class AuthorizationServerConfig {
 
-    @Value("${app.authorization.loginUrl}")
-    private String loginUrl;
-
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -39,7 +35,7 @@ public class AuthorizationServerConfig {
 
         http.exceptionHandling(c -> c
                 .defaultAuthenticationEntryPointFor(
-                        new LoginUrlAuthenticationEntryPoint(loginUrl),
+                        new LoginUrlAuthenticationEntryPoint("/page/signin"),
                         new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                 )
         );
