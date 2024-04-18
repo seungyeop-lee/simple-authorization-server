@@ -1,8 +1,5 @@
 spring:
   security:
-    user:
-      name: user@example.com
-      password: '{noop}user'
     oauth2:
       client:
         registration:

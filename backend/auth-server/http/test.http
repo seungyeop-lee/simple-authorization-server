@@ -3,7 +3,7 @@
 POST http://localhost:8080/signin
 Content-Type: application/x-www-form-urlencoded
 
-username=user@example.com&password=user
+email=user@example.com&password=user
 
 ### logout
 GET http://localhost:8080/logout

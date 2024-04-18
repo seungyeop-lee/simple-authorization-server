@@ -1,10 +1,10 @@
-import {Button, IconButton, InputAdornment, OutlinedInput, OutlinedInputProps} from "@mui/material";
+import {Button, OutlinedInput} from "@mui/material";
 import {Link} from "react-router-dom";
 import GoogleIcon from "@mui/icons-material/Google";
 import AppleIcon from "@mui/icons-material/Apple";
 import {Stage, useProcessState} from "../state/useProcessState.ts";
-import React, {useEffect, useRef, useState} from "react";
-import {Visibility, VisibilityOff} from "@mui/icons-material";
+import {useEffect, useRef} from "react";
+import PasswordInput from "../components/PasswordInput.tsx";
 
 function Signin() {
     const {setStage, setInputEmail, currentStage} = useProcessState();
@@ -13,11 +13,11 @@ function Signin() {
         setInputEmail(undefined);
     }, []);
 
-    return currentStage === Stage.Step1 ? <Step1 /> : <Step2 />;
+    return currentStage === Stage.Step1 ? <Step1/> : <Step2/>;
 }
 
 function Step1() {
-    const {inputEmail, setStage, setInputEmail} = useProcessState();
+    const {setStage, setInputEmail} = useProcessState();
     const emailInputRef = useRef<HTMLInputElement>();
 
     return <>
@@ -26,8 +26,13 @@ function Step1() {
         </div>
         <div className="grid gap-6 mt-7">
             <div>
-                <OutlinedInput size="small" placeholder="이메일 주소" fullWidth autoComplete="email" value={inputEmail} inputRef={emailInputRef}/>
+                <OutlinedInput size="small" placeholder="이메일 주소" fullWidth autoComplete="email" inputRef={emailInputRef}/>
                 <Button fullWidth size="large" className="mt-3 text-sm text-white bg-black hover:bg-slate-900" onClick={() => {
+                    let email = emailInputRef.current?.value;
+                    if (!email) {
+                        alert('이메일 주소를 입력해주세요');
+                        return;
+                    }
                     setInputEmail(emailInputRef.current?.value);
                     setStage(Stage.Step2);
                 }}>계속하기</Button>
@@ -40,7 +45,8 @@ function Step1() {
                 </div>
             </div>
             <div className="grid gap-2">
-                <Button fullWidth size="medium" variant="outlined" color="inherit" className="text-sm text-black bg-white hover:bg-slate-50" onClick={() => window.location.href = '/oauth2/authorization/google-idp'}>
+                <Button fullWidth size="medium" variant="outlined" color="inherit" className="text-sm text-black bg-white hover:bg-slate-50"
+                        onClick={() => window.location.href = '/oauth2/authorization/google-idp'}>
                     <GoogleIcon className="w-5 h-5 mr-2"/>Google 계정으로 계속하기
                 </Button>
                 <Button fullWidth size="medium" variant="outlined" color="inherit" className="text-sm text-black bg-white hover:bg-slate-50" onClick={() => alert('준비 중 입니다.')}>
@@ -67,7 +73,7 @@ function Step2() {
         <div className="grid gap-6 mt-7">
             <div>
                 <OutlinedInput size="small" placeholder="이메일 주소" fullWidth autoComplete="email" value={inputEmail} disabled/>
-                <PasswordInput className="mt-3" inputRef={passwordInputRef} />
+                <PasswordInput className="mt-3" inputRef={passwordInputRef}/>
                 <Button fullWidth size="large" className="mt-3 text-sm text-white bg-black hover:bg-slate-900" onClick={() => {
                     let password = passwordInputRef.current?.value;
                     if (!password) {
@@ -85,34 +91,6 @@ function Step2() {
             <Link className="underline underline-offset-4 hover:text-primary" to="/page/privacy">개인정보 처리방침</Link>
         </p>
     </>;
-}
-
-function PasswordInput(props: OutlinedInputProps) {
-    const [showPassword, setShowPassword] = useState<boolean>(false);
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
-    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-    };
-
-    return <OutlinedInput
-        size="small"
-        placeholder="비밀번호"
-        fullWidth
-        type={showPassword ? 'text' : 'password'}
-        endAdornment={
-            <InputAdornment position="end">
-                <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-            </InputAdornment>
-        }
-        {...props}
-    />;
 }
 
 export default Signin

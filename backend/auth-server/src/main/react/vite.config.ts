@@ -10,6 +10,7 @@ export default defineConfig({
   base: '/client/',
   build: {
     outDir: '../resources/public/client',
-    emptyOutDir: true
+    emptyOutDir: true,
+    minify: false
   }
 })

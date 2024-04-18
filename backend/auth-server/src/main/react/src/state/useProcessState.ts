@@ -1,5 +1,4 @@
 import {create} from "zustand";
-import {NavigateFunction} from "react-router/dist/lib/hooks";
 import {createForm, createInput} from "../utils/HtmlElementUtil.ts";
 
 export enum Stage {
@@ -8,20 +7,15 @@ export enum Stage {
 }
 
 interface ProcessState {
-    navigate: NavigateFunction | undefined;
-    setNavigate: (navigate: NavigateFunction) => void;
     currentStage: Stage | undefined;
     inputEmail: string | undefined;
     setStage: (stage: Stage) => void;
     setInputEmail: (email?: string) => void;
     startSignin: (password: string) => void;
+    startSignup: (password: string) => Promise<Response>;
 }
 
 export const useProcessState = create<ProcessState>((set, get) => ({
-    navigate: undefined,
-    setNavigate(navigate) {
-        set({navigate: navigate});
-    },
     currentStage: undefined,
     inputEmail: undefined,
     setStage(stage) {
@@ -32,12 +26,25 @@ export const useProcessState = create<ProcessState>((set, get) => ({
     },
     async startSignin(password) {
         signin(get().inputEmail!, password);
+    },
+    async startSignup(password) {
+        return signup(get().inputEmail!, password);
     }
 }));
 
 function signin(email: string, password: string) {
     const form = createForm('/signin');
-    createInput('username', email, form);
+    createInput('email', email, form);
     createInput('password', password, form);
     form.submit();
+}
+
+async function signup(email: string, password: string) {
+    return await fetch('/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({email: email, password: password})
+    });
 }

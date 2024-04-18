@@ -10,19 +10,21 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import simpleauthorizationserver.backend.authserver.app.MemberService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, MemberAuthenticationProvider authenticationProvider) throws Exception {
         http.authorizeHttpRequests(c -> c
                 .requestMatchers(
                         "/error",
                         "/favicon.ico",
                         "/page/**",
-                        "/client/**"
+                        "/client/**",
+                        "/signup"
                 ).permitAll()
                 .anyRequest().authenticated()
         );
@@ -31,9 +33,11 @@ public class SecurityConfig {
         http.formLogin(c -> c
                 .loginProcessingUrl("/signin")
                 .defaultSuccessUrl("/authenticated")
+                .usernameParameter("email")
                 // 로그인 실패 시 리다이렉션 방지
                 .failureHandler((request, response, exception) -> response.setStatus(HttpServletResponse.SC_BAD_REQUEST))
         );
+        http.authenticationProvider(authenticationProvider);
 
         http.oauth2Login(Customizer.withDefaults());
 
@@ -55,5 +59,10 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public MemberAuthenticationProvider memberAuthenticationProvider(MemberService memberService, PasswordEncoder passwordEncoder) {
+        return new MemberAuthenticationProvider(memberService, passwordEncoder);
     }
 }
