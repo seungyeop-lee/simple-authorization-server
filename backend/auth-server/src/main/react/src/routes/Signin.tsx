@@ -1,17 +1,36 @@
-import {Button, OutlinedInput} from "@mui/material";
+import {Button, IconButton, InputAdornment, OutlinedInput, OutlinedInputProps} from "@mui/material";
 import {Link} from "react-router-dom";
 import GoogleIcon from "@mui/icons-material/Google";
 import AppleIcon from "@mui/icons-material/Apple";
+import {Stage, useProcessState} from "../state/useProcessState.ts";
+import React, {useEffect, useRef, useState} from "react";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
 
 function Signin() {
+    const {setStage, setInputEmail, currentStage} = useProcessState();
+    useEffect(() => {
+        setStage(Stage.Step1);
+        setInputEmail(undefined);
+    }, []);
+
+    return currentStage === Stage.Step1 ? <Step1 /> : <Step2 />;
+}
+
+function Step1() {
+    const {inputEmail, setStage, setInputEmail} = useProcessState();
+    const emailInputRef = useRef<HTMLInputElement>();
+
     return <>
         <div className="text-center">
             <h1 className="text-2xl font-semibold tracking-tight">다시 오신 것을 환영합니다</h1>
         </div>
         <div className="grid gap-6 mt-7">
             <div>
-                <OutlinedInput size="small" placeholder="이메일 주소" fullWidth autoComplete="email"/>
-                <Button fullWidth size="large" className="mt-3 text-sm text-white bg-black hover:bg-slate-900">계속하기</Button>
+                <OutlinedInput size="small" placeholder="이메일 주소" fullWidth autoComplete="email" value={inputEmail} inputRef={emailInputRef}/>
+                <Button fullWidth size="large" className="mt-3 text-sm text-white bg-black hover:bg-slate-900" onClick={() => {
+                    setInputEmail(emailInputRef.current?.value);
+                    setStage(Stage.Step2);
+                }}>계속하기</Button>
                 <p className="text-center mt-3 text-sm text-slate-400">계정이 없으신가요? <Link to="/page/signup" className="text-black">가입하기</Link></p>
             </div>
             <div className="relative">
@@ -21,10 +40,10 @@ function Signin() {
                 </div>
             </div>
             <div className="grid gap-2">
-                <Button fullWidth size="medium" variant="outlined" color="inherit" className="text-sm text-black bg-white hover:bg-slate-50">
+                <Button fullWidth size="medium" variant="outlined" color="inherit" className="text-sm text-black bg-white hover:bg-slate-50" onClick={() => window.location.href = '/oauth2/authorization/google-idp'}>
                     <GoogleIcon className="w-5 h-5 mr-2"/>Google 계정으로 계속하기
                 </Button>
-                <Button fullWidth size="medium" variant="outlined" color="inherit" className="text-sm text-black bg-white hover:bg-slate-50">
+                <Button fullWidth size="medium" variant="outlined" color="inherit" className="text-sm text-black bg-white hover:bg-slate-50" onClick={() => alert('준비 중 입니다.')}>
                     <AppleIcon className="w-5 h-5 mr-2"/>Apple 계정으로 계속하기
                 </Button>
             </div>
@@ -35,6 +54,65 @@ function Signin() {
             <Link className="underline underline-offset-4 hover:text-primary" to="/page/privacy">개인정보 처리방침</Link>
         </p>
     </>;
+}
+
+function Step2() {
+    const {inputEmail, startSignin} = useProcessState();
+    const passwordInputRef = useRef<HTMLInputElement>();
+
+    return <>
+        <div className="text-center">
+            <h1 className="text-2xl font-semibold tracking-tight">비밀번호를 입력해주세요</h1>
+        </div>
+        <div className="grid gap-6 mt-7">
+            <div>
+                <OutlinedInput size="small" placeholder="이메일 주소" fullWidth autoComplete="email" value={inputEmail} disabled/>
+                <PasswordInput className="mt-3" inputRef={passwordInputRef} />
+                <Button fullWidth size="large" className="mt-3 text-sm text-white bg-black hover:bg-slate-900" onClick={() => {
+                    let password = passwordInputRef.current?.value;
+                    if (!password) {
+                        alert('비밀번호를 입력해주세요');
+                        return;
+                    }
+                    startSignin(password);
+                }}>계속</Button>
+                <p className="text-center mt-3 text-sm text-slate-400">계정이 없으신가요? <Link to="/page/signup" className="text-black">가입하기</Link></p>
+            </div>
+        </div>
+        <p className="mt-5 px-8 text-center text-sm text-slate-400">
+            <Link className="underline underline-offset-4 hover:text-primary" to="/page/terms">이용 약관</Link>
+            <span className="mx-2">|</span>
+            <Link className="underline underline-offset-4 hover:text-primary" to="/page/privacy">개인정보 처리방침</Link>
+        </p>
+    </>;
+}
+
+function PasswordInput(props: OutlinedInputProps) {
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    };
+
+    return <OutlinedInput
+        size="small"
+        placeholder="비밀번호"
+        fullWidth
+        type={showPassword ? 'text' : 'password'}
+        endAdornment={
+            <InputAdornment position="end">
+                <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+            </InputAdornment>
+        }
+        {...props}
+    />;
 }
 
 export default Signin

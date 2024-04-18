@@ -1,12 +1,9 @@
 ### signin
 #@no-redirect
 POST http://localhost:8080/signin
-Content-Type: application/json
+Content-Type: application/x-www-form-urlencoded
 
-{
-  "username": "user",
-  "password": "user"
-}
+username=user@example.com&password=user
 
 ### logout
 GET http://localhost:8080/logout
@@ -23,4 +20,4 @@ POST http://localhost:8080/oauth2/token
 Content-Type: application/x-www-form-urlencoded
 Authorization: Basic oidc-client oidc-secret
 
-grant_type=authorization_code&redirect_uri=http://localhost:8080/check&code=
+grant_type=authorization_code&redirect_uri=http://localhost:8080/check&code=FJSX21x1k9SdkfwtDKShXs7VkzdNZGV8IyvpXNbjTD9jcCySjYcTcGwL8tvJeeUIraGtt5v0_ci_qg6T9ZCZKptbVFBn4EXAeYc8zYgmme4TdUd4yIb43_hZE68XglL_

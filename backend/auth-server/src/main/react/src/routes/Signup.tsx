@@ -22,10 +22,10 @@ function Signup() {
                 </div>
             </div>
             <div className="grid gap-2">
-                <Button fullWidth size="medium" variant="outlined" color="inherit" className="text-sm text-black bg-white hover:bg-slate-50">
+                <Button fullWidth size="medium" variant="outlined" color="inherit" className="text-sm text-black bg-white hover:bg-slate-50" onClick={() => window.location.href = '/oauth2/authorization/google-idp'}>
                     <GoogleIcon className="w-5 h-5 mr-2"/>Google 계정으로 계속하기
                 </Button>
-                <Button fullWidth size="medium" variant="outlined" color="inherit" className="text-sm text-black bg-white hover:bg-slate-50">
+                <Button fullWidth size="medium" variant="outlined" color="inherit" className="text-sm text-black bg-white hover:bg-slate-50" onClick={() => alert('준비 중 입니다.')}>
                     <AppleIcon className="w-5 h-5 mr-2"/>Apple 계정으로 계속하기
                 </Button>
             </div>

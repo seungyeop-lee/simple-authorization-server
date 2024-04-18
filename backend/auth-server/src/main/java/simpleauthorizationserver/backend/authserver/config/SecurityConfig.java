@@ -3,13 +3,13 @@ package simpleauthorizationserver.backend.authserver.config;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import simpleauthorizationserver.backend.authserver.config.jsonlogin.JsonLoginConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -28,14 +28,14 @@ public class SecurityConfig {
         );
 
         http.csrf(AbstractHttpConfigurer::disable);
-        http.formLogin(AbstractHttpConfigurer::disable);
-
-        http.with(new JsonLoginConfigurer<>(), c -> c
+        http.formLogin(c -> c
                 .loginProcessingUrl("/signin")
                 .defaultSuccessUrl("/authenticated")
                 // 로그인 실패 시 리다이렉션 방지
                 .failureHandler((request, response, exception) -> response.setStatus(HttpServletResponse.SC_BAD_REQUEST))
         );
+
+        http.oauth2Login(Customizer.withDefaults());
 
         http.logout(c -> c
                 // 로그아웃 완료 시 리다이렉션 방지
