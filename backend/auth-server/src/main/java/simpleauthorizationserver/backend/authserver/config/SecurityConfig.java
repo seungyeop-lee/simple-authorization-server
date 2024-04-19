@@ -3,14 +3,18 @@ package simpleauthorizationserver.backend.authserver.config;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import simpleauthorizationserver.backend.authserver.app.MemberService;
+import simpleauthorizationserver.backend.authserver.auth.internal.MemberAuthenticationProvider;
+import simpleauthorizationserver.backend.authserver.auth.social.AuthenticationResultConverter;
+import simpleauthorizationserver.backend.authserver.auth.social.OAuth2LoginSuccessListener;
 
 @Configuration
 @EnableWebSecurity
@@ -37,9 +41,16 @@ public class SecurityConfig {
                 // 로그인 실패 시 리다이렉션 방지
                 .failureHandler((request, response, exception) -> response.setStatus(HttpServletResponse.SC_BAD_REQUEST))
         );
-        http.authenticationProvider(authenticationProvider);
 
-        http.oauth2Login(Customizer.withDefaults());
+        http.oauth2Login(c -> c
+                .addObjectPostProcessor(new ObjectPostProcessor<OAuth2LoginAuthenticationFilter>() {
+                    @Override
+                    public <O extends OAuth2LoginAuthenticationFilter> O postProcess(O object) {
+                        object.setAuthenticationResultConverter(new AuthenticationResultConverter());
+                        return object;
+                    }
+                })
+        );
 
         http.logout(c -> c
                 // 로그아웃 완료 시 리다이렉션 방지
@@ -64,5 +75,10 @@ public class SecurityConfig {
     @Bean
     public MemberAuthenticationProvider memberAuthenticationProvider(MemberService memberService, PasswordEncoder passwordEncoder) {
         return new MemberAuthenticationProvider(memberService, passwordEncoder);
+    }
+
+    @Bean
+    public OAuth2LoginSuccessListener memberOAuth2LoginSuccessListener(MemberService memberService) {
+        return new OAuth2LoginSuccessListener(memberService);
     }
 }

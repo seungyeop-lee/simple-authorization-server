@@ -16,7 +16,7 @@ public class SignupController {
 
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(@RequestBody SignupParam param) {
-        memberService.createMember(param.getEmail(), param.getPassword());
+        memberService.join(param.getEmail(), param.getPassword());
         return ResponseEntity.ok().build();
     }
 

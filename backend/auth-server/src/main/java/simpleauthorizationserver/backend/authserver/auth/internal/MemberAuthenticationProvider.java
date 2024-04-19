@@ -1,6 +1,5 @@
-package simpleauthorizationserver.backend.authserver.config;
+package simpleauthorizationserver.backend.authserver.auth.internal;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;

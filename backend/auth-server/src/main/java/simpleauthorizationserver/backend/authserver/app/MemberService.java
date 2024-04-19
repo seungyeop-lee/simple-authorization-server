@@ -16,9 +16,14 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Member createMember(String email, String password) {
+    public Member join(String email, String password) {
         String encodePassword = passwordEncoder.encode(password);
         Member member = Member.forSignupOf(email, encodePassword);
+        return memberRepository.save(member);
+    }
+
+    public Member joinFromSocial(String email) {
+        Member member = Member.forSignupOf(email, null);
         return memberRepository.save(member);
     }
 
@@ -29,7 +34,7 @@ public class MemberService {
     @PostConstruct
     public void createTestData() {
         if (memberRepository.count() == 0L) {
-            createMember("user@example.com", "user");
+            join("user@example.com", "user");
         }
     }
 }
