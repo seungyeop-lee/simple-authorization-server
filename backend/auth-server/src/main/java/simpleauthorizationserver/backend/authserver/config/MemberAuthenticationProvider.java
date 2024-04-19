@@ -52,9 +52,4 @@ public class MemberAuthenticationProvider implements AuthenticationProvider {
             super("not match password");
         }
     }
-
-    @PostConstruct
-    public void createTestData() {
-        memberService.createMember("user@example.com", "user");
-    }
 }

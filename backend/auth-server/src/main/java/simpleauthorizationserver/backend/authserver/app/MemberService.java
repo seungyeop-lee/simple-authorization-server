@@ -1,5 +1,6 @@
 package simpleauthorizationserver.backend.authserver.app;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,12 @@ public class MemberService {
 
     public Optional<Member> findByEmail(String email) {
         return memberRepository.findByEmail(email);
+    }
+
+    @PostConstruct
+    public void createTestData() {
+        if (memberRepository.count() == 0L) {
+            createMember("user@example.com", "user");
+        }
     }
 }

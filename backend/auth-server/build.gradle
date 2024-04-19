@@ -37,8 +37,11 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // h2 database
+    // h2 database client
     runtimeOnly 'com.h2database:h2'
+    
+    // mariadb database client
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 }
 
 tasks.named('test') {
