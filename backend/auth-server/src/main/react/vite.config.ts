@@ -11,6 +11,16 @@ export default defineConfig({
   build: {
     outDir: '../resources/public/client',
     emptyOutDir: true,
-    minify: false
+    sourcemap: 'inline',
+    chunkSizeWarningLimit: 5000,
+    rollupOptions: {
+      onwarn(warning, defaultHandler) {
+        if (warning.code === 'SOURCEMAP_ERROR') {
+          return
+        }
+
+        defaultHandler(warning)
+      },
+    },
   }
 })
