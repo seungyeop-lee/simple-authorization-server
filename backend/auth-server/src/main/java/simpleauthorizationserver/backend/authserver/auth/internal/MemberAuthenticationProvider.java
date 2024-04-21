@@ -29,7 +29,7 @@ public class MemberAuthenticationProvider implements AuthenticationProvider {
             throw new NotMatchPasswordException();
         }
 
-        UsernamePasswordAuthenticationToken authenticationToken = UsernamePasswordAuthenticationToken.authenticated(member.getEmail(), null, List.of());
+        UsernamePasswordAuthenticationToken authenticationToken = UsernamePasswordAuthenticationToken.authenticated(member.getUuid(), null, List.of());
         authenticationToken.setDetails(member);
 
         return authenticationToken;

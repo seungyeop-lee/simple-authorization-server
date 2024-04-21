@@ -10,9 +10,11 @@ import java.util.Map;
 public class GoogleOAuth2AuthenticationToken implements SocialOAuth2AuthenticationToken {
 
     private final OAuth2User oAuth2User;
+    private String name;
 
     public GoogleOAuth2AuthenticationToken(OAuth2LoginAuthenticationToken loginToken) {
         this.oAuth2User = loginToken.getPrincipal();
+        this.name = oAuth2User.getName();
     }
 
     @Override
@@ -27,6 +29,16 @@ public class GoogleOAuth2AuthenticationToken implements SocialOAuth2Authenticati
 
     @Override
     public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getEmail() {
         return oAuth2User.getAttribute("email");
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 }

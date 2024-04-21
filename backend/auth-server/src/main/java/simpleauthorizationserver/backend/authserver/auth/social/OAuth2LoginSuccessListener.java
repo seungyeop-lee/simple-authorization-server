@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
+import org.springframework.transaction.annotation.Transactional;
+import simpleauthorizationserver.backend.authserver.app.Member;
 import simpleauthorizationserver.backend.authserver.app.MemberService;
 
 @Slf4j
@@ -20,16 +21,21 @@ public class OAuth2LoginSuccessListener {
      * @param event
      */
     @EventListener
+    @Transactional
     public void handleOAuth2LoginSuccess(InteractiveAuthenticationSuccessEvent event) {
         if (event.getGeneratedBy() != OAuth2LoginAuthenticationFilter.class) {
             return;
         }
 
-        Authentication authentication = event.getAuthentication();
-        log.info("OAuth2 login success: {}", authentication.getName());
-
-        if (memberService.findByEmail(authentication.getName()).isEmpty()) {
-            memberService.joinFromSocial(authentication.getName());
+        if (event.getAuthentication().getPrincipal() instanceof SocialOAuth2AuthenticationToken t) {
+            memberService.findByEmail(t.getEmail())
+                    .ifPresentOrElse(
+                            member -> t.setName(member.getUuid()),
+                            () -> {
+                                Member member = memberService.joinFromSocial(t.getEmail());
+                                t.setName(member.getUuid());
+                            }
+                    );
         }
     }
 }

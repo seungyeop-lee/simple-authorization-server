@@ -1,10 +1,13 @@
 package simpleauthorizationserver.backend.authserver.auth.social;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.authentication.OAuth2LoginAuthenticationToken;
 
+@RequiredArgsConstructor
 public class AuthenticationResultConverter implements Converter<OAuth2LoginAuthenticationToken, OAuth2AuthenticationToken> {
+    
     /**
      * client registration 별 authentication token 생성
      *
