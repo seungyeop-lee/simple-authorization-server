@@ -13,11 +13,11 @@ GET http://localhost:8080/authenticated
 
 ### get code
 #@no-redirect
-GET http://localhost:8080/oauth2/authorize?response_type=code&client_id=oidc-client&redirect_uri=http://localhost:8080/check&scope=openid+profile
+GET http://localhost:8080/oauth2/authorize?response_type=code&client_id=oauth-client&redirect_uri=http://localhost:8080/check
 
 ### get token
 POST http://localhost:8080/oauth2/token
 Content-Type: application/x-www-form-urlencoded
-Authorization: Basic oidc-client oidc-secret
+Authorization: Basic oauth-client oauth-secret
 
-grant_type=authorization_code&redirect_uri=http://localhost:8080/check&code=FJSX21x1k9SdkfwtDKShXs7VkzdNZGV8IyvpXNbjTD9jcCySjYcTcGwL8tvJeeUIraGtt5v0_ci_qg6T9ZCZKptbVFBn4EXAeYc8zYgmme4TdUd4yIb43_hZE68XglL_
+grant_type=authorization_code&redirect_uri=http://localhost:8080/check&code=j8GBxDwYD5OqFoqiKNggmc-U3uCGwx5K201mKEzNc274RPWzX6aWtSK3SvFL_xudJwsB8IfI1G0GtMyN-S2P9KMUnwAVzsvWoiW-6_nfX3l9r77W-7RJLh40VHCOKKAK
